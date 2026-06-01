@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\Api\PengelolaWisataController;
 
+
 // Pengelola Wisata (Protected + role pengelola)
 Route::middleware(['auth:sanctum', 'pengelola'])->group(function () {
     Route::get('/pengelola/wisata', [PengelolaWisataController::class, 'index']);
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 // Super Admin only
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'super_admin'])->group(function () {
     Route::get('/admin/pengajuan', [PengajuanController::class, 'index']);
     Route::post('/admin/pengajuan/{id}/approve', [PengajuanController::class, 'approve']);
     Route::post('/admin/pengajuan/{id}/reject', [PengajuanController::class, 'reject']);
