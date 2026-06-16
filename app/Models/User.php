@@ -32,6 +32,17 @@ class User extends Authenticatable
 
     public function bookmarks()
     {
-     return $this->hasMany(Bookmark::class);
+        return $this->hasMany(Bookmark::class);
+    }
+
+    public function getAvatarAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+        return url($value);
     }
 }

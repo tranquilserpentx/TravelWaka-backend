@@ -115,7 +115,8 @@ class PengelolaWisataController extends Controller
         // Hapus semua foto wisata
         $photos = Photo::where('wisata_id', $id)->get();
         foreach ($photos as $photo) {
-            Storage::disk('public')->delete($photo->photo_url);
+            $filename = str_replace('/storage/', '', $photo->getRawOriginal('photo_url'));
+            Storage::disk('public')->delete($filename);
             $photo->delete();
         }
 
@@ -146,8 +147,12 @@ class PengelolaWisataController extends Controller
             'is_cover' => 'boolean',
         ]);
 
+        // Cek apakah ini foto pertama dari wisata tersebut
+        $isFirstPhoto = !Photo::where('wisata_id', $wisataId)->exists();
+        $isCover = $request->is_cover || $isFirstPhoto ? 1 : 0;
+
         // Jika is_cover true, reset cover foto lain
-        if ($request->is_cover) {
+        if ($isCover) {
             Photo::where('wisata_id', $wisataId)
                 ->update(['is_cover' => 0]);
         }
@@ -157,7 +162,7 @@ class PengelolaWisataController extends Controller
         $photo = Photo::create([
             'wisata_id' => $wisataId,
             'photo_url' => Storage::url($path),
-            'is_cover' => $request->is_cover ?? 0,
+            'is_cover' => $isCover,
         ]);
 
         return response()->json([
@@ -192,7 +197,8 @@ class PengelolaWisataController extends Controller
             ], 404);
         }
 
-        Storage::disk('public')->delete($photo->photo_url);
+        $filename = str_replace('/storage/', '', $photo->getRawOriginal('photo_url'));
+        Storage::disk('public')->delete($filename);
         $photo->delete();
 
         return response()->json([

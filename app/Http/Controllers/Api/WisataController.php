@@ -12,7 +12,7 @@ class WisataController extends Controller
     // ✅ Ambil semua wisata
     public function index()
     {
-        $wisata = Wisata::with(['category', 'coverPhoto'])
+        $wisata = Wisata::with(['category', 'coverPhoto', 'photos'])
             ->orderBy('rating', 'desc')
             ->get();
 
@@ -58,7 +58,7 @@ class WisataController extends Controller
     // ✅ Filter wisata by kategori
     public function byCategory($categoryId)
     {
-        $wisata = Wisata::with(['category', 'coverPhoto'])
+        $wisata = Wisata::with(['category', 'coverPhoto', 'photos'])
             ->where('category_id', $categoryId)
             ->orderBy('rating', 'desc')
             ->get();

@@ -12,7 +12,7 @@ class BookmarkController extends Controller
     // ✅ Ambil semua bookmark user
     public function index(Request $request)
     {
-        $bookmarks = Bookmark::with(['wisata.category', 'wisata.coverPhoto'])
+        $bookmarks = Bookmark::with(['wisata.category', 'wisata.coverPhoto', 'wisata.photos'])
             ->where('user_id', $request->user()->id)
             ->get();
 

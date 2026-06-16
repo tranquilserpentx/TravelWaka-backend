@@ -19,4 +19,15 @@ class Photo extends Model
     {
         return $this->belongsTo(Wisata::class);
     }
+
+    public function getPhotoUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+        return url($value);
+    }
 }

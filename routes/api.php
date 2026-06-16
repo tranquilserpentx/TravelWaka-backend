@@ -36,7 +36,8 @@ Route::prefix('auth')->group(function () {
     Route::post('/login',    [AuthController::class, 'login']);
     Route::get('/google',          [AuthController::class, 'redirectToGoogle']);
     Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
-    });
+    Route::post('/google/android', [AuthController::class, 'loginGoogleAndroid']);
+});
 
 // ✅ Wisata Public Routes
 Route::prefix('wisata')->group(function () {
